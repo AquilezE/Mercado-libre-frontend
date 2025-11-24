@@ -1,0 +1,100 @@
+﻿@{
+}
+@model Producto
+@{
+    ViewData["Title"] = "Comprar";
+    ViewData["SubTitle"] = "Detalle del Producto";
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb small">
+        <li class="breadcrumb-item">
+            <a class="text-decoration-none" title="Regresar al listado" asp-action="Index">Listado</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["SubTitle"]</li>
+    </ol>
+</nav>
+
+<h2 class="text-center mb-3">@ViewData["Title"] <small class="text-muted fs-5">@ViewData["SubTitle"]</small></h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="card mt-3">
+    <div class="row g-0">
+        <div class="col-md-6 text-center bg-white pt-3">
+            <img src="@((Model.ArchivoId == null) ? "https://placehold.co/600x400/FFF/999?text=Artículo" : $"{ViewBag.Url}/api/archivos/{Model.ArchivoId}")"
+                 alt="@Model.Titulo" class="img-fluid rounded" style="max-height: 400px;">
+        </div>
+        <div class="col-md-6">
+            <div class="card-body">
+                <h4>@Model.Titulo</h4>
+                <h3 class="text-primary mb-3">@Html.DisplayFor(model => model.Precio)</h3>
+
+                <div class="mb-3">
+                    @if (Model.Categorias != null && Model.Categorias.Any())
+                    {
+                        @foreach(var cat in Model.Categorias)
+                        {
+                            <span class="badge rounded-pill text-bg-warning me-1">@cat.Nombre</span>
+                        }
+                    }
+                </div>
+
+                <p class="text-success fw-semibold mb-4">
+                    <i class="bi bi-lightning-fill"></i> Envío gratis
+                </p>
+
+                <form asp-action="AgregarAlCarrito" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="productoId" value="@Model.ProductoId" />
+                    
+                    <div class="mb-3">
+                        <label for="cantidad" class="form-label">Cantidad:</label>
+                        <div class="input-group" style="max-width: 200px;">
+                            <input type="number" class="form-control text-center" name="cantidad" id="cantidad" 
+                                   value="1" min="1" max="10" required>
+                            <span class="input-group-text">unidades</span>
+                        </div>
+                        <div class="form-text">Máximo 10 unidades por compra</div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-cart-plus"></i> Agregar al Carrito
+                        </button>
+                        <a class="btn btn-outline-secondary btn-lg" asp-action="Index">
+                            <i class="bi bi-arrow-left"></i> Seguir Comprando
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Descripción del Producto</h5>
+            </div>
+            <div class="card-body">
+                <p>@Model.Descripcion</p>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,19 @@
+﻿@{
+    ViewData["Title"] = "Checkout";
+    ViewData["SubTitle"] = "Pedido Exitoso";
+}
+
+<div class="text-center">
+    <div class="alert alert-success" role="alert">
+        <i class="bi bi-check-circle display-1 text-success"></i>
+        <h4 class="alert-heading mt-3">¡Pedido procesado exitosamente!</h4>
+        <p>Su pedido ha sido recibido y está siendo procesado.</p>
+        <hr>
+    </div>
+
+    <div class="mt-4">
+        <a class="btn btn-primary" asp-controller="Comprar" asp-action="Index">
+            <i class="bi bi-shop"></i> Continuar Comprando
+        </a>
+    </div>
+</div>

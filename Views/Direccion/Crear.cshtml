@@ -1,0 +1,122 @@
+﻿@model Direccion
+@{
+    ViewData["Title"] = "Direcciones";
+    ViewData["SubTitle"] = "Agregar Nueva Dirección";
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('direccionForm');
+            const codigoPostalInput = document.getElementById('CodigoPostal');
+
+            codigoPostalInput.addEventListener('input', function() {
+                const value = this.value.replace(/\D/g, ''); // Remove non-digits
+                this.value = value.substring(0, 5); // Limit to 5 digits
+            });
+
+            form.addEventListener('submit', function(e) {
+                const calle = document.getElementById('Calle').value.trim();
+                const ciudad = document.getElementById('Ciudad').value.trim();
+                const codigoPostal = document.getElementById('CodigoPostal').value.trim();
+
+                if (!calle || !ciudad || !codigoPostal) {
+                    e.preventDefault();
+                    alert('Todos los campos son obligatorios');
+                    return;
+                }
+
+                if (!/^\d{5}$/.test(codigoPostal)) {
+                    e.preventDefault();
+                    alert('El código postal debe tener exactamente 5 dígitos');
+                    return;
+                }
+            });
+        });
+    </script>
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb small">
+        <li class="breadcrumb-item">
+            <a class="text-decoration-none" href="@(ViewBag.ReturnUrl ?? Url.Action("Checkout", "Carrito"))">Checkout</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">@ViewData["SubTitle"]</li>
+    </ol>
+</nav>
+
+<h2 class="text-center mb-3">@ViewData["Title"] <small class="text-muted fs-5">@ViewData["SubTitle"]</small></h2>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="bi bi-geo-alt"></i> Nueva Dirección de Entrega
+                </h5>
+            </div>
+            <div class="card-body">
+                <form asp-action="Crear" method="post" id="direccionForm">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Calle" class="form-control" placeholder="Calle"
+                               maxlength="200" required autocomplete="street-address">
+                        <label asp-for="Calle"></label>
+                        <span asp-validation-for="Calle" class="text-danger"></span>
+                        <div class="form-text">
+                            <i class="bi bi-info-circle"></i>
+                            Ejemplo: Av. Principal 123, Col. Centro
+                        </div>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="Ciudad" class="form-control" placeholder="Ciudad"
+                               maxlength="100" required autocomplete="address-level2">
+                        <label asp-for="Ciudad"></label>
+                        <span asp-validation-for="Ciudad" class="text-danger"></span>
+                        <div class="form-text">
+                            <i class="bi bi-info-circle"></i>
+                            Ejemplo: Ciudad de México
+                        </div>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                        <input asp-for="CodigoPostal" class="form-control" placeholder="Código Postal"
+                               maxlength="5" pattern="\d{5}" required autocomplete="postal-code"
+                               inputmode="numeric">
+                        <label asp-for="CodigoPostal"></label>
+                        <span asp-validation-for="CodigoPostal" class="text-danger"></span>
+                        <div class="form-text">
+                            <i class="bi bi-info-circle"></i>
+                            Debe ser exactamente 5 dígitos (ejemplo: 12345)
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="bi bi-check-circle"></i> Guardar Dirección
+                        </button>
+                        <a href="@(ViewBag.ReturnUrl ?? Url.Action("Checkout", "Carrito"))"
+                           class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

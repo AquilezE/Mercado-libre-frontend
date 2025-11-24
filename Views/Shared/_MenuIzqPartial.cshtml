@@ -7,6 +7,7 @@
         {
             <a class="nav-link" asp-controller="Comprar" asp-action="Index">Comprar</a>
             <a class="nav-link" asp-controller="Carrito" asp-action="Index"><i class="bi bi-cart"></i> Carrito</a>
+            <a class="nav-link" asp-controller="Pedido" asp-action="Index">Pedidos</a>
 
         }else if(User.FindFirstValue(ClaimTypes.Role) == "Administrador"){
                         <a class="nav-link" asp-controller="Productos" asp-action="Index">Productos</a>
