@@ -19,7 +19,9 @@ namespace Mercado_libre_frontend.Models
         public required string Nombre { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        public required string Rol { get; set; }
+        public string Rol { get; set; } = "Usuario";
+
+
 
     }
 }

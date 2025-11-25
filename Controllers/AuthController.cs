@@ -62,5 +62,32 @@ namespace Mercado_libre_frontend.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "Auth");
         }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> Crear()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CrearAsync(UsuarioPwd model)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    await auth.RegistrarUsuarioAsync(model);
+                    return RedirectToAction("Index", "Auth");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("Nombre", "No ha sido posible crear la cuenta. Intentelo nuevamente.");
+                }
+            }
+
+            return View(model);
+        }
     }
 }

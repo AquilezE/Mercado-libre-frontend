@@ -71,14 +71,6 @@
                         </div>
                     }
                 </div>
-
-
-            <div class="mb-3 text-center">
-                <a asp-controller="Direccion" asp-action="Crear" asp-route-returnUrl="@Url.Action("Checkout", "Carrito")" 
-                   class="btn btn-outline-primary btn-sm">
-                    <i class="bi bi-plus-circle"></i> Agregar nueva dirección
-                </a>
-            </div>
             }
             else
             {
@@ -87,6 +79,12 @@
                     <a href="#" class="alert-link">Agregue una dirección</a> antes de continuar.
                 </div>
             }
+                        <div class="mb-3 text-center">
+                <a asp-controller="Direccion" asp-action="Crear" asp-route-returnUrl="@Url.Action("Checkout", "Carrito")" 
+                   class="btn btn-outline-primary btn-sm">
+                    <i class="bi bi-plus-circle"></i> Agregar nueva dirección
+                </a>
+            </div>
 
             <div class="d-grid gap-2">
                 @if (ViewBag.Direcciones is List<Direccion> dirs && dirs.Count > 0)

@@ -29,5 +29,13 @@ namespace Mercado_libre_frontend.Services
             var authProperties = new AuthenticationProperties();
             await httpContextAccessor.HttpContext?.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
         }
+
+        public async Task RegistrarUsuarioAsync(UsuarioPwd usuario)
+        {
+            var response = await client.PostAsJsonAsync("api/auth/registro", usuario);
+            response.EnsureSuccessStatusCode();
+        }
+
     }
 }
+
