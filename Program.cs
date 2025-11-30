@@ -13,54 +13,134 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<EnviaBearerDelegatingHandler>();
 builder.Services.AddTransient<RefrescaTokenDelegatingHandler>();
 
-builder.Services.AddHttpClient<AuthClientService>(httpClient => { httpClient.BaseAddress = new Uri(UrlWebAPI!); });
-builder.Services.AddHttpClient<CategoriasClientService>(httpClient => { httpClient.BaseAddress = new Uri(UrlWebAPI!); })
-    .AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
-    .AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
+HttpClientHandler CreateHandler() =>
+    new HttpClientHandler
+    {
+        ServerCertificateCustomValidationCallback =
+            HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+    };
 
-builder.Services.AddHttpClient<UsuariosClientService>(httpClient => { httpClient.BaseAddress = new Uri(UrlWebAPI!); })
-    .AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
-    .AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
+// -------------------------
+// AuthClientService
+// -------------------------
+builder.Services.AddHttpClient<AuthClientService>(c =>
+{
+    c.BaseAddress = new Uri(UrlWebAPI!);
+})
+.ConfigurePrimaryHttpMessageHandler(CreateHandler);
 
-builder.Services.AddHttpClient<RolesClientService>(httpClient => { httpClient.BaseAddress = new Uri(UrlWebAPI!); })
-    .AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
-    .AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
+// -------------------------
+// CategoriasClientService
+// -------------------------
+builder.Services.AddHttpClient<CategoriasClientService>(c =>
+{
+    c.BaseAddress = new Uri(UrlWebAPI!);
+})
+.AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
+.AddHttpMessageHandler<RefrescaTokenDelegatingHandler>()
+.ConfigurePrimaryHttpMessageHandler(CreateHandler);
 
-builder.Services.AddHttpClient<ProductosClientService>(httpClient => { httpClient.BaseAddress = new Uri(UrlWebAPI!); })
-    .AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
-    .AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
+// -------------------------
+// UsuariosClientService
+// -------------------------
+builder.Services.AddHttpClient<UsuariosClientService>(c =>
+{
+    c.BaseAddress = new Uri(UrlWebAPI!);
+})
+.AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
+.AddHttpMessageHandler<RefrescaTokenDelegatingHandler>()
+.ConfigurePrimaryHttpMessageHandler(CreateHandler);
 
-builder.Services.AddHttpClient<PerfilClientService>(httpClient => { httpClient.BaseAddress = new Uri(UrlWebAPI!); })
-    .AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
-    .AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
+// -------------------------
+// RolesClientService
+// -------------------------
+builder.Services.AddHttpClient<RolesClientService>(c =>
+{
+    c.BaseAddress = new Uri(UrlWebAPI!);
+})
+.AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
+.AddHttpMessageHandler<RefrescaTokenDelegatingHandler>()
+.ConfigurePrimaryHttpMessageHandler(CreateHandler);
 
-builder.Services.AddHttpClient<ArchivosClientService>(httpClient => { httpClient.BaseAddress = new Uri(UrlWebAPI!); })
-    .AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
-    .AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
+// -------------------------
+// ProductosClientService
+// -------------------------
+builder.Services.AddHttpClient<ProductosClientService>(c =>
+{
+    c.BaseAddress = new Uri(UrlWebAPI!);
+})
+.AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
+.AddHttpMessageHandler<RefrescaTokenDelegatingHandler>()
+.ConfigurePrimaryHttpMessageHandler(CreateHandler);
 
-builder.Services.AddHttpClient<BitacoraClientService>(httpClient => { httpClient.BaseAddress = new Uri(UrlWebAPI!); })
-    .AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
-    .AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
+// -------------------------
+// PerfilClientService
+// -------------------------
+builder.Services.AddHttpClient<PerfilClientService>(c =>
+{
+    c.BaseAddress = new Uri(UrlWebAPI!);
+})
+.AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
+.AddHttpMessageHandler<RefrescaTokenDelegatingHandler>()
+.ConfigurePrimaryHttpMessageHandler(CreateHandler);
 
-builder.Services.AddHttpClient<CarritoClientService>(httpClient => { httpClient.BaseAddress = new Uri(UrlWebAPI!); })
-    .AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
-    .AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
+// -------------------------
+// ArchivosClientService
+// -------------------------
+builder.Services.AddHttpClient<ArchivosClientService>(c =>
+{
+    c.BaseAddress = new Uri(UrlWebAPI!);
+})
+.AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
+.AddHttpMessageHandler<RefrescaTokenDelegatingHandler>()
+.ConfigurePrimaryHttpMessageHandler(CreateHandler);
 
-builder.Services.AddHttpClient<PedidoClientService>(httpClient => { httpClient.BaseAddress = new Uri(UrlWebAPI!); })
-    .AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
-    .AddHttpMessageHandler<RefrescaTokenDelegatingHandler>();
+// -------------------------
+// BitacoraClientService
+// -------------------------
+builder.Services.AddHttpClient<BitacoraClientService>(c =>
+{
+    c.BaseAddress = new Uri(UrlWebAPI!);
+})
+.AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
+.AddHttpMessageHandler<RefrescaTokenDelegatingHandler>()
+.ConfigurePrimaryHttpMessageHandler(CreateHandler);
+
+// -------------------------
+// CarritoClientService
+// -------------------------
+builder.Services.AddHttpClient<CarritoClientService>(c =>
+{
+    c.BaseAddress = new Uri(UrlWebAPI!);
+})
+.AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
+.AddHttpMessageHandler<RefrescaTokenDelegatingHandler>()
+.ConfigurePrimaryHttpMessageHandler(CreateHandler);
+
+// -------------------------
+// PedidoClientService
+// -------------------------
+builder.Services.AddHttpClient<PedidoClientService>(c =>
+{
+    c.BaseAddress = new Uri(UrlWebAPI!);
+})
+.AddHttpMessageHandler<EnviaBearerDelegatingHandler>()
+.AddHttpMessageHandler<RefrescaTokenDelegatingHandler>()
+.ConfigurePrimaryHttpMessageHandler(CreateHandler);
 
 
+// -------------------------
+// Authentication cookies
+// -------------------------
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options => {
-
+    .AddCookie(options =>
+    {
         options.Cookie.Name = ".MercadoLibreFrontend";
         options.LoginPath = "/Auth";
-        options.AccessDeniedPath= "/Home/AccessDenied";
+        options.AccessDeniedPath = "/Home/AccessDenied";
         options.SlidingExpiration = true;
         options.ExpireTimeSpan = TimeSpan.FromMinutes(20);
     });
-
 
 var app = builder.Build();
 
@@ -73,6 +153,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}"
-    );
+);
 
 app.Run();

@@ -64,8 +64,9 @@ namespace Mercado_libre_frontend.Controllers
         }
 
         [AllowAnonymous]
-        public async Task<IActionResult> Crear()
+        public async Task<IActionResult> Crear(int? exito =null)
         {
+	    ViewBag.Exito = exito;
             return View();
         }
 
@@ -78,13 +79,16 @@ namespace Mercado_libre_frontend.Controllers
             {
                 try
                 {
-                    await auth.RegistrarUsuarioAsync(model);
-                    return RedirectToAction("Index", "Auth");
-                }
-                catch (Exception ex)
-                {
-                    ModelState.AddModelError("Nombre", "No ha sido posible crear la cuenta. Intentelo nuevamente.");
-                }
+
+		    Console.WriteLine("=========");	
+		    Console.WriteLine(model);	
+		    Console.WriteLine("---------");
+		    await auth.RegistrarUsuarioAsync(model);
+		    return RedirectToAction("Crear", "Auth", new { exito = 1 });
+                }                catch (Exception ex)
+		                {
+					                    ModelState.AddModelError("Email", "No ha sido posible crear la cuenta con este correo.");
+							                    }
             }
 
             return View(model);

@@ -1,11 +1,47 @@
 @model UsuarioPwd
 @{
     ViewData["Title"] = "Crear cuenta";
+    bool mostrarModal = ViewBag.Exito != null && ViewBag.Exito == 1; 
 }
+
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    @if (mostrarModal)
+    {
+        <script>
+            var modal = new bootstrap.Modal(document.getElementById('modalExito'));
+            modal.show();
+        </script>
+    }
 }
+
+
+<div class="modal fade" id="modalExito" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Cuenta creada</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <p>Esta cuenta ha sido creada con éxito.</p>
+      </div>
+
+      <div class="modal-footer">
+        <a href="/Auth" class="btn btn-primary">Ir al inicio de sesión</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+
+
 
 <form asp-action="Crear" method="post">
     <div class="card mx-auto" style="max-width: 500px;">
@@ -31,6 +67,10 @@
                 <input asp-for="Password" class="form-control" placeholder="Password">
                 <label asp-for="Password" class="form-label"></label>
                 <span asp-validation-for="Password" class="text-danger"></span>
+		    <div class="form-text">
+        La contraseña debe tener mínimo 8 caracteres, incluir mayúsculas, minúsculas, números y al menos un símbolo de: 
+        <strong>! # $ % & / ( ) = ?</strong>
+    </div>
             </div>
 
             <p class="card-text small">Complete la información para crear su cuenta en la plataforma.</p>
@@ -42,3 +82,4 @@
         </div>
     </div>
 </form>
+

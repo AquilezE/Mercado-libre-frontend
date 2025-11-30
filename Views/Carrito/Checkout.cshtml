@@ -35,7 +35,7 @@
                         {
                             <tr>
                                 <td>@(item.Producto?.Titulo ?? "Producto")</td>
-                                <td class="text-center">x@item.Cantidad</td>
+                                <td class="text-center">@item.Cantidad</td>
                                 <td class="text-end">@Html.DisplayFor(modelItem => item.PrecioUnitario)</td>
                             </tr>
                         }
