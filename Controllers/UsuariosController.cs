@@ -68,6 +68,15 @@ namespace Mercado_libre_frontend.Controllers
                 }
                 catch(HttpRequestException ex)
                 {
+
+		
+		    if(ex.StatusCode == System.Net.HttpStatusCode.Conflict)
+		    {
+		    	ModelState.AddModelError("Email", "Este correo ya existe");
+		    
+		    }
+
+
                     if (ex.StatusCode == System.Net.HttpStatusCode.Unauthorized)
                     {
                         return RedirectToAction("Salir", "Auth");

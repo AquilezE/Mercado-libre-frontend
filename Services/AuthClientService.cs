@@ -33,8 +33,17 @@ namespace Mercado_libre_frontend.Services
         public async Task RegistrarUsuarioAsync(UsuarioPwd usuario)
         {
             var response = await client.PostAsJsonAsync("api/auth/registro", usuario);
-            response.EnsureSuccessStatusCode();
-        }
+        
+	        if (!response.IsSuccessStatusCode)
+		 {
+					             string serverMessage = await response.Content.ReadAsStringAsync();
+					             throw new HttpRequestException(serverMessage, null, response.StatusCode);
+		 }
+
+
+	
+	}
+
 
     }
 }

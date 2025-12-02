@@ -79,16 +79,21 @@ namespace Mercado_libre_frontend.Controllers
             {
                 try
                 {
-
-		    Console.WriteLine("=========");	
-		    Console.WriteLine(model);	
-		    Console.WriteLine("---------");
 		    await auth.RegistrarUsuarioAsync(model);
 		    return RedirectToAction("Crear", "Auth", new { exito = 1 });
-                }                catch (Exception ex)
-		                {
-					                    ModelState.AddModelError("Email", "No ha sido posible crear la cuenta con este correo.");
-							                    }
+                }
+		catch (HttpRequestException ex)
+		{
+
+			if(ex.StatusCode == System.Net.HttpStatusCode.Conflict)
+			{
+				ModelState.AddModelError("Email", "No ha sido posible crear la cuenta con este correo.");
+			}
+		}
+		catch (Exception ex)
+		{
+			ModelState.AddModelError("Nombre", "Ocurrio un error inesperado. Intente nuevamente");
+		}
             }
 
             return View(model);
